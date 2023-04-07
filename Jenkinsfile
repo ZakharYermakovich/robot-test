@@ -29,44 +29,41 @@ pipeline {
             }
         }
 
-        stage('Install python and robot framework') {
-            steps {
-                echo 'Upgrade yum - sudo yum -y update'
-                sh 'sudo yum -y update'
+//         stage('Install python and robot framework') {
+//             steps {
+//                 echo 'Upgrade yum - sudo yum -y update'
+//                 sh 'sudo yum -y update'
 
-                echo 'yum install epel-release -y'
-                sh 'yum install epel-release -y'
-                echo 'yum install dnf -y'
-                sh 'yum install dnf -y'
+//                 echo 'yum install epel-release -y'
+//                 sh 'yum install epel-release -y'
+//                 echo 'yum install dnf -y'
+//                 sh 'yum install dnf -y'
 
-                echo 'Install python'
-                sh 'sudo dnf install python3'
-                sh 'python3 -V'
+//                 echo 'Install python'
+//                 sh 'sudo dnf install python3'
+//                 sh 'python3 -V'
 
-                echo 'Upgrade pip3'
-                sh 'sudo -H pip3 install --upgrade pip'
+//                 echo 'Upgrade pip3'
+//                 sh 'sudo -H pip3 install --upgrade pip'
 
-                echo 'install robotframework'
-                sh 'pip3 install robotframework'
+//                 echo 'install robotframework'
+//                 sh 'pip3 install robotframework'
 
-                echo 'install robotframework-sshlibrary'
-                sh 'pip3 install robotframework-sshlibrary'
+//                 echo 'install robotframework-sshlibrary'
+//                 sh 'pip3 install robotframework-sshlibrary'
 
-                echo 'install json library'
-                sh 'pip3 install robotframework-jsonlibrary'
+//                 echo 'install json library'
+//                 sh 'pip3 install robotframework-jsonlibrary'
 
-                echo 'install requests library'
-                sh 'pip3 install robotframework-requests'
-            }
-        }
+//                 echo 'install requests library'
+//                 sh 'pip3 install robotframework-requests'
+//             }
+//        }
         stage('Run tests') {
             steps {
                 script {
-                    echo 'Run tests'
-                    String cmd = "robot "
-                    cmd += "test/suites/components/testrail"
-                    echo "${cmd}"
-                    sh "${cmd}"
+               
+                    sh "robot test/suites/components/testrail"
 
                 }
             }
