@@ -1,5 +1,5 @@
 pipeline {
-  agent {  }
+  agent { any }
     options {
         timestamps()
         buildDiscarder(logRotator(daysToKeepStr: '21', numToKeepStr: '50'))
