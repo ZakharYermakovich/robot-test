@@ -1,34 +1,31 @@
 pipeline {
- 
+  agent {  }
     options {
         timestamps()
         buildDiscarder(logRotator(daysToKeepStr: '21', numToKeepStr: '50'))
         disableConcurrentBuilds()
     }
 	
-    parameters {
-        gitParameter name: 'BRANCH_NAME', branchFilter: 'origin/(.*)', defaultValue: 'main', selectedValue: 'DEFAULT', sortMode: 'ASCENDING', type: 'PT_BRANCH'    
-    }
 
     stages {
         stage("Build init") {
             steps {
                 script {
                     def BUILD_TRIGGER_BY = "${currentBuild.getBuildCauses()[0].shortDescription} [${currentBuild.getBuildCauses()[0].userId}]".replace("Started by user ", "")
-                    currentBuild.displayName = "#${BUILD_NUMBER}-${BRANCH_NAME}"
+                    currentBuild.displayName = "#${BUILD_NUMBER}"
                     currentBuild.description =
                             """
 	                Triggered by: ${BUILD_TRIGGER_BY}
 	                <br>Triggered from: ${BUILD_URL}
 	                <br>
-	                <br>Branch: ${BRANCH_NAME}
+
 	                """
                 }
             }
         }
         stage("Download sources") {
             steps {
-                git branch: "${params.BRANCH_NAME}", credentialsId: 'svc_bitbucket', url: 'https://bitbucket.rdlab.local/scm/aut/stf-robot.git'
+                git branch: "main", credentialsId: 'svc_bitbucket', url: 'https://bitbucket.rdlab.local/scm/aut/stf-robot.git'
             }
         }
 
