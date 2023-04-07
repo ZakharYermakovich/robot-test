@@ -25,7 +25,7 @@ pipeline {
         }
         stage("Download sources") {
             steps {
-                git branch: "main", credentialsId: 'svc_bitbucket', url: 'https://bitbucket.rdlab.local/scm/aut/stf-robot.git'
+                git branch: "main", credentialsId: 'svc_bitbucket', url: 'https://github.com/ZakharYermakovich/robot-test'
             }
         }
 
