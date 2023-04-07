@@ -1,37 +1,13 @@
 pipeline {
-    agent {
-        node {
-            label 'java14'
-        }
-    }
+ 
     options {
         timestamps()
         buildDiscarder(logRotator(daysToKeepStr: '21', numToKeepStr: '50'))
         disableConcurrentBuilds()
-        /* office365ConnectorWebhooks([[
-                                            startNotification    : false,
-                                            notifyAborted        : true,
-                                            notifyFailure        : true,
-                                            notifyNotBuilt       : false,
-                                            notifySuccess        : true,
-                                            notifyUnstable       : true,
-                                            notifyRepeatedFailure: true,
-                                            notifyBackToNormal   : true,
-
-                                            name                 : "Jenkins Notifications",
-                                            url                  : 'https://allot365.webhook.office.com/webhookb2/fd7d1a87-2075-4e43-b4f0-f18bfba1f435@789e5ff8-0396-414e-803b-13a424e9f5d2/JenkinsCI/8d9b9f2beae141a2a0c2927e51470839/5acaaf99-7ad6-4f57-b9c3-cf407860e5e2'
-                                    ]]) */
     }
+	
     parameters {
-        gitParameter name: 'BRANCH_NAME', branchFilter: 'origin/(.*)', defaultValue: 'develop', selectedValue: 'DEFAULT', sortMode: 'ASCENDING', type: 'PT_BRANCH'
-
-        choice(name: 'COMPONENT_TO_TEST', choices: ['all', 'nx', 'smp', 'aos', 'tgm'], description: 'Choose a component to test')
-        choice(name: 'FEATURE_TO_TEST', choices: ['all', 'hhe', 'api', 'get', 'some_feature'], description: 'Choose a feature to test')
-        choice(name: 'VERSION_TO_TEST', choices: ['all', '17.3.10', '17.4.10', '16.3.10'], description: 'Choose product version')
-
-        string(name: 'NX_IP', description: 'Specify NX IP')
-        string(name: 'NE_IP', description: 'Specify NE IP')
-        string(name: 'SMP_IP', description: 'Specify SMP IP')
+        gitParameter name: 'BRANCH_NAME', branchFilter: 'origin/(.*)', defaultValue: 'main', selectedValue: 'DEFAULT', sortMode: 'ASCENDING', type: 'PT_BRANCH'    
     }
 
     stages {
@@ -91,27 +67,7 @@ pipeline {
                 script {
                     echo 'Run tests'
                     String cmd = "robot "
-                    if (env.NX_IP) {
-                        cmd += "-v NX_IP:$NX_IP "
-                    }
-                    if (env.NE_IP) {
-                        cmd += "-v NE_IP:$NE_IP "
-                    }
-                    if (env.SMP_IP) {
-                        cmd += "-v SMP_IP:$SMP_IP "
-                    }
-                    if (!params.COMPONENT_TO_TEST.equals('all')){
-                        cmd += "--suite *${COMPONENT_TO_TEST}* "
-                    }
-                    if (!params.FEATURE_TO_TEST.equals('all')){
-                        cmd += "--test *${FEATURE_TO_TEST}* "
-                    }
-                    if (!params.VERSION_TO_TEST.equals('all')){
-                        cmd += "--include ${VERSION_TO_TEST} "
-                    }
-                    //cmd +='.'
-                    cmd += "test/suites/components/nx/nx-base-test.robot"
-                    // cmd == "robot --suite *${COMPONENT_TO_TEST}* --test *${FEATURE_TO_TEST}* --include ${VERSION_TO_TEST} ."
+                    cmd += "test/suites/components/testrail"
                     echo "${cmd}"
                     sh "${cmd}"
 
