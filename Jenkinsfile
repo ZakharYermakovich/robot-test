@@ -63,7 +63,7 @@ pipeline {
             steps {
                 script {
                
-                    sh "robot test/suites/components/testrail"
+                    bat "robot test/suites/components/testrail"
 
                 }
             }
